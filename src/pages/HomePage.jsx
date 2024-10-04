@@ -2,6 +2,7 @@ import React from 'react';
 import NavigationBar from '../components/NavigationBar';
 import SearchBar from '../components/SearchBar';
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 const HomePage = () => {
     return (
@@ -14,12 +15,13 @@ const HomePage = () => {
             <div className='flex justify-center'>
                 <Link className='text-xl text-white text-center underline'>View all courses</Link>
             </div>
-            <div className='flex justify-around mt-20'>
+            <div className='flex justify-around my-20'>
                 <h2 className='rounded-b-md p-4 border-b-4 border-green-700 text-black text-2xl font-extrabold text-center w-fit'>320 <br /> courses </h2>
                 <h2 className='rounded-b-md p-4 border-b-4 border-green-700 text-black text-2xl font-extrabold text-center w-fit'>3200+ <br /> Students </h2>
                 <h2 className='rounded-b-md p-4 border-b-4 border-green-700 text-black text-2xl font-extrabold text-center w-fit'>100+  <br /> teachers  </h2>
                 <h2 className='rounded-b-md p-4 border-b-4 border-green-700 text-black text-2xl font-extrabold text-center w-fit'>10  <br /> Subjects </h2>
             </div>
+            <Footer></Footer>
         </div>
     );
 };
