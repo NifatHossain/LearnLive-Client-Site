@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as faceapi from 'face-api.js';
 import { useState } from "react";
-import { div } from "@tensorflow/tfjs";
 
 const FaceRecognition = () => {
   const videoRef = useRef();
