@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
 import * as faceapi from 'face-api.js';
 import { useState } from "react";
+import { div } from "@tensorflow/tfjs";
 
 const FaceRecognition = () => {
   const videoRef = useRef();
   const canvasRef=useRef()
+  const [loading, setLoading] = useState(true);
   const [age,setAge]=useState(0)
   const [gender,setGender]=useState('')
   const [mood, setMood]=useState('')
@@ -38,6 +40,7 @@ const FaceRecognition = () => {
         .withFaceDescriptor();
   
       if (detection) {
+        setLoading(false)
         const { descriptor } = detection;
         const storedDescriptors = loadStoredDescriptors();
   
@@ -116,7 +119,7 @@ const FaceRecognition = () => {
         // Call the recognition function
         recognizePerson();
       }
-    }, 60000);
+    }, 100);
   };
   
   useEffect(() => {
@@ -140,10 +143,14 @@ const FaceRecognition = () => {
         />
       </div>
       <div className="text-xl font-medium">
-        <h2>Age: {age}</h2>
-        <h2>Gender: {gender}</h2>
-        <h2>Expression: {mood}</h2>
-        <h2>Person: {detectedPerson}</h2>
+        {
+          loading? <p>Data loading...</p>: <div>
+            <h2>Age: {age}</h2>
+            <h2>Gender: {gender}</h2>
+            <h2>Expression: {mood}</h2>
+            <h2>Person: {detectedPerson}</h2>
+          </div>
+        }
       </div>
     </div>
   );
