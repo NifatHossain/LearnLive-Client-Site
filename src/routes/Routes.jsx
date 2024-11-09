@@ -5,22 +5,46 @@ import HomePage from "../pages/HomePage";
 import Login from "../components/Login";
 import SignUp from "../components/Signup";
 import Profile from "../components/profile";
+import AllCourses from "../pages/AllCourses";
+import Layout from "../pages/Layout";
+import ErrorPage from "../pages/ErrorPage";
+import FaceRecognition from "../pages/FaceRecognition";
+import FaceRegister from "../pages/FaceRegister";
 
 export const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomePage></HomePage>
-    },
-    {
-      path:'/login',
-      element:<Login></Login>
-    },
-    {
-      path:'/signup',
-      element:<SignUp></SignUp>
-    },
-    {
-      path:'/profile',
-      element: <Profile></Profile>
+      element:<Layout></Layout>,
+      errorElement:<ErrorPage></ErrorPage>,
+      children:[
+        {
+          path:'/',
+          element:<HomePage></HomePage>
+        },
+        {
+          path: "/allCourses",
+          element: <AllCourses></AllCourses>
+        },
+        {
+          path: "/face",
+          element:<FaceRecognition></FaceRecognition>
+        },
+        {
+          path:"/register",
+          element:<FaceRegister></FaceRegister>
+        },
+        {
+          path:'/login',
+          element:<Login></Login>
+        },
+        {
+          path:'/signup',
+          element:<SignUp></SignUp>
+        },
+        {
+          path:'/profile',
+          element: <Profile></Profile>
+        }
+      ]
     }
 ]);
