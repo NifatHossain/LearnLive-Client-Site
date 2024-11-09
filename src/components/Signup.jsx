@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../logo.jpeg';
+// import logo from '../../public/';
 
 const SignUp = () => {
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -33,7 +33,7 @@ const SignUp = () => {
         <div className="min-h-screen flex flex-col lg:flex-row items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 text-white p-4 lg:p-0">
             <div className="lg:w-3/5 w-full h-full lg:h-[800px] bg-gradient-to-r from-blue-500 to-purple-500 text-white p-8 lg:rounded-lg shadow-lg flex flex-col items-center justify-center">
                 <div className="text-center">
-                    <img src={logo} alt="Logo" className="w-32 mx-auto mb-4" />
+                    {/* <img src={logo} alt="Logo" className="w-32 mx-auto mb-4" /> */}
                     <h3 className="text-2xl font-bold mb-2">Welcome!</h3>
                     <p className="text-gray-200">Please sign up to create an account.</p>
                 </div>
