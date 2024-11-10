@@ -1,16 +1,23 @@
 
-import { Link } from 'react-router-dom';
-import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
+import { AuthContext } from '../providers/AuthProvider';
+import toast, { Toaster } from 'react-hot-toast';
+import useAxiosPublic from '../hooks/useAxiosPublic';
 // import logo from '../../public/';
 
 const SignUp = () => {
     const videoRef=useRef()
+    const axiosPublic= useAxiosPublic()
+    const navigate= useNavigate()
+    const [stream, setStream] = useState(null);
     const [loading, setLoading] = useState(true);
     const [name, setName]=useState('')
     const [studentId, setStudentId]=useState('')
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
+    const {signUp,updateUserInfo}=useContext(AuthContext)
     // const nameRef= useRef(null)
     // const stdIdRef= useRef(null)
     const [showRegisterBtn, setShowRegisterBtn]=useState(false)
@@ -24,12 +31,20 @@ const SignUp = () => {
         await faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL)
     };
     const startVideo = () => {
-        navigator.getUserMedia(
-          { video: {} },
-          (stream) => (videoRef.current.srcObject = stream),
-          (err) => console.error(err)
-        );
-      };
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((mediaStream) => {
+                videoRef.current.srcObject = mediaStream;
+                setStream(mediaStream); // Store the MediaStream for later
+            })
+            .catch((err) => console.error(err));
+    };
+
+    const stopCamera = () => {
+        if (stream) {
+            stream.getTracks().forEach((track) => track.stop());
+            setStream(null); // Clear the stream from state
+        }
+    };
     const handleFormSubmit=(e)=>{
         e.preventDefault()
         // const name= nameRef.current.value
@@ -41,9 +56,45 @@ const SignUp = () => {
 
     }
     const savePersonDescriptor = (person) => {
-        const registeredPersons = JSON.parse(localStorage.getItem('registeredPersons')) || [];
-        registeredPersons.push(person);
-        localStorage.setItem('registeredPersons', JSON.stringify(registeredPersons));
+        // const registeredPersons = JSON.parse(localStorage.getItem('registeredPersons')) || [];
+        // registeredPersons.push(person);
+        // localStorage.setItem('registeredPersons', JSON.stringify(registeredPersons));
+       
+        axiosPublic.post('/addUser',person)
+        .then((result)=>{
+                if(result.data.insertedId){
+                
+                signUp(person.email, person.password)
+                .then(result=>{
+                    const user= result.user;
+                    console.log(user)
+                    const image= 'https://i.ibb.co.com/VY9Bfbt/Basic-Ui-28186-29.jpg'
+                    updateUserInfo(person.name,image)
+                    .then(()=>{
+                        toast.success('Successfully Registered')
+                        stopCamera();
+                        navigate('/allCourses')
+                    })
+                    .catch(error=>{
+                        console.log(error.message)
+                        toast.error('failed to signUp')
+                    })
+                })
+                .catch(error=>{
+                    console.log(error.message)
+                    toast.error('failed to signUp')
+                })
+                
+            }
+            else{
+                toast.error(result.data.message)
+                console.log(result.data.message)
+                }
+        })
+        .catch((error)=>{
+            console.log(error)
+            toast.error("failed to save in database")
+        })
     };
     const registerPerson = async () => {
         if (videoRef.current) {
@@ -63,6 +114,7 @@ const SignUp = () => {
               email: email,
               password: password,
               descriptor: Array.from(descriptor), // Convert to array to save as JSON
+              role:'student'
             };
       
             // Save this data to a backend or local storage
@@ -133,12 +185,12 @@ const SignUp = () => {
                         name="email"
                         placeholder="Email"
                         required  value={email} onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 mt-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-400"
+                        className="w-full px-4 mt-4 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-400"
                     />
                     <input 
                         type="password"
                         name="password"
-                        placeholder="Password"
+                        placeholder="Password minimum 6 character"
                         required  value={password} onChange={(e) => setPassword(e.target.value)}
                         className="w-full px-4 py-2 mt-4 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-400  text-gray-900"
                     />
@@ -158,6 +210,7 @@ const SignUp = () => {
                     </p>
                 </form>
             </div>
+            <Toaster />
         </div>
     );
 }
