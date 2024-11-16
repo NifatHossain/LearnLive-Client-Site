@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../providers/AuthProvider';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
+    const {signIn}=useContext(AuthContext)
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -16,24 +19,35 @@ const Login = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const { email, password } = formData;
+        // if (!email || !password) {
+        //     alert('Please fill in all fields');
+        //     return;
+        // }
+        // const storedEmail = localStorage.getItem('email');
+        // const storedPassword = localStorage.getItem('password');
 
-        if (!email || !password) {
-            alert('Please fill in all fields');
-            return;
-        }
-        const storedEmail = localStorage.getItem('email');
-        const storedPassword = localStorage.getItem('password');
+        // if (email === storedEmail && password === storedPassword) {
+        //     navigate('/profile');
+        // } else {
+        //     alert("worng,Try again");
+        // }
 
-        if (email === storedEmail && password === storedPassword) {
-            navigate('/profile');
-        } else {
-            alert("worng,Try again");
-        }
+        // localStorage.setItem('email', email);
+        // localStorage.setItem('password', password);
 
-        localStorage.setItem('email', email);
-        localStorage.setItem('password', password);
+        // setFormData({ email: '', password: '' });
+        signIn(email,password)
+        .then(result=>{
+            const user= result.user;
+            console.log(user);
+            toast.success('Login Successful')
+            navigate('/')
+        })
+        .catch(error=>{
+            toast.error('login failed')
+            console.log(error.message)
+        })
 
-        setFormData({ email: '', password: '' });
     };
 
     return (
@@ -42,7 +56,7 @@ const Login = () => {
                 <div className="text-center mb-6">
                     {/* <img className='w-16 mx-auto' src="src/logo.jpeg" alt="logo" /> */}
                     <h2 className='text-3xl font-extrabold text-gray-800'>Hello!</h2>
-                    <p className='mt-2 text-sm text-gray-600'>Welcome to Hypernance, Please log in.</p>
+                    <p className='mt-2 text-sm text-gray-600'>Welcome to LearnLive, Please log in.</p>
                 </div>
                 <form className='space-y-6' onSubmit={handleSubmit}>
                     <div className='space-y-4'>
@@ -87,6 +101,7 @@ const Login = () => {
                     </p>
                 </div>
             </div>
+            <Toaster />
         </div>
     );
 }

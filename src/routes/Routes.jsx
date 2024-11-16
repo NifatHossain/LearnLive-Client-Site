@@ -10,6 +10,8 @@ import Layout from "../pages/Layout";
 import ErrorPage from "../pages/ErrorPage";
 import FaceRecognition from "../pages/FaceRecognition";
 import FaceRegister from "../pages/FaceRegister";
+import Test from "../pages/test";
+import AddCourse from "../pages/AddCourse";
 
 export const router = createBrowserRouter([
     {
@@ -44,6 +46,17 @@ export const router = createBrowserRouter([
         {
           path:'/profile',
           element: <Profile></Profile>
+        },
+        {
+          path:'/test',
+          element: <Test/>
+        },
+        {
+          path:'/addCourse',
+          element:<AddCourse></AddCourse>
+        },
+        {
+          
         }
       ]
     }
