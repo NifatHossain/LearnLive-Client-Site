@@ -12,6 +12,8 @@ import FaceRecognition from "../pages/FaceRecognition";
 import FaceRegister from "../pages/FaceRegister";
 import Test from "../pages/test";
 import AddCourse from "../pages/AddCourse";
+import CourseDetails from "../pages/CourseDetails";
+import PrivateRoute from "../providers/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -53,10 +55,11 @@ export const router = createBrowserRouter([
         },
         {
           path:'/addCourse',
-          element:<AddCourse></AddCourse>
+          element:<PrivateRoute><AddCourse></AddCourse></PrivateRoute>
         },
         {
-          
+          path:'/courseDetails/:id',
+          element:<PrivateRoute><CourseDetails></CourseDetails></PrivateRoute>
         }
       ]
     }

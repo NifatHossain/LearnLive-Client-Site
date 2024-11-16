@@ -1,5 +1,6 @@
 import React from 'react';
 import useAllCourse from '../hooks/useAllCourse';
+import { Link } from 'react-router-dom';
 
 const AllCourses = () => {
     const [isLoading, courses, refetch]=useAllCourse()
@@ -22,7 +23,7 @@ const AllCourses = () => {
                             <h2 className="card-title">{course.courseCode}</h2>
                             <p>Teacher: {course.instructorName}</p>
                             <div className="card-actions justify-end">
-                            <button className="btn bg-gradient-to-br from-purple-600 to-blue-500 text-white">Details</button>
+                            <Link to={`/courseDetails/${course._id}`} ><button className="btn bg-gradient-to-br from-purple-600 to-blue-500 text-white">Details</button></Link>
                             </div>
                         </div>
                     </div>

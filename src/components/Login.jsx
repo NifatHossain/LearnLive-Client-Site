@@ -51,7 +51,7 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center p-4">
+        <div className="min-h-screen bg-blue-50 text-white flex items-center justify-center p-4">
             <div className="bg-white text-gray-900 rounded-2xl shadow-lg p-8 w-full max-w-md">
                 <div className="text-center mb-6">
                     {/* <img className='w-16 mx-auto' src="src/logo.jpeg" alt="logo" /> */}
