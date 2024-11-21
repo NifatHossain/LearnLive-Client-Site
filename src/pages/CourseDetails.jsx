@@ -43,7 +43,11 @@ const CourseDetails = () => {
             const pdfLink = transformDriveLink(courseDetails.courseOutline);
         } */}
         <iframe
-          src={transformDriveLink(courseDetails.courseOutline)}
+          src={
+            courseDetails.courseOutlineFileURL.endsWith(".docx")
+              ? `https://docs.google.com/gview?url=${courseDetails.courseOutlineFileURL}&embedded=true`
+              : courseDetails.courseOutlineFileURL
+          }
           width="100%"
           height="600px"
           className="border"

@@ -14,10 +14,14 @@ const SignUp = () => {
     const [stream, setStream] = useState(null);
     const [loading, setLoading] = useState(true);
     const [name, setName]=useState('')
+    const [imageUrl, setImageUrl] = useState(''); 
     const [studentId, setStudentId]=useState('')
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
+    const [role, setRole]=useState('')
     const {signUp,updateUserInfo}=useContext(AuthContext)
+    const imageHostingKey = import.meta.env.VITE_imageHostingKey
+    const imageHostingApi= `https://api.imgbb.com/1/upload?key=${imageHostingKey}`
     // const nameRef= useRef(null)
     // const stdIdRef= useRef(null)
     const [showRegisterBtn, setShowRegisterBtn]=useState(false)
@@ -45,6 +49,27 @@ const SignUp = () => {
             setStream(null); // Clear the stream from state
         }
     };
+    const handleFileChange = async(e) => {
+        const file = e.target.files[0]; 
+        if (file) {
+            const formData = new FormData();
+            formData.append("image", file); // 'file' is the expected key for the file
+        
+            try {
+                const result = await axiosPublic.post(imageHostingApi, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+
+                const image = result.data.data.display_url;
+                setImageUrl(image)
+                console.log("Uploaded image URL:", image);
+            } catch (error) {
+                console.error("Error uploading file:", error.response?.data || error.message);
+            }
+        }
+    };
     const handleFormSubmit=(e)=>{
         e.preventDefault()
         // const name= nameRef.current.value
@@ -68,7 +93,7 @@ const SignUp = () => {
                 .then(result=>{
                     const user= result.user;
                     console.log(user)
-                    const image= 'https://i.ibb.co.com/VY9Bfbt/Basic-Ui-28186-29.jpg'
+                    const image= imageUrl
                     updateUserInfo(person.name,image)
                     .then(()=>{
                         toast.success('Successfully Registered')
@@ -110,11 +135,12 @@ const SignUp = () => {
             // Save the descriptor along with a name or ID of the person
             const person = {
               name: name, // You can use input fields to get this value
-              studentId: studentId,
+              Id: studentId,
               email: email,
               password: password,
               descriptor: Array.from(descriptor), // Convert to array to save as JSON
-              role:'student'
+              role:role,
+              imageUrl:imageUrl
             };
       
             // Save this data to a backend or local storage
@@ -160,6 +186,12 @@ const SignUp = () => {
                         width="400"
                         height="300"
                     />
+                    {
+                     loading && <div>
+                        <p className='text-White text-xl'>please stay still an look <br />at the camera Properly <br />Detecting... </p>
+                        
+                    </div>
+                    }
                 </div>
             </div>
             <div className="lg:w-2/5 w-full  bg-gray-200 p-8 rounded-lg shadow-lg mt-8 lg:mt-0 lg:h-[800px] flex flex-col justify-center">
@@ -194,6 +226,15 @@ const SignUp = () => {
                         required  value={password} onChange={(e) => setPassword(e.target.value)}
                         className="w-full px-4 py-2 mt-4 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-400  text-gray-900"
                     />
+                    {/* <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label> */}
+                    <select required onChange={(e) =>{setRole(e.target.value)} } id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option selected>Choose your Role</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload your Image</label>
+                    <input required onChange={handleFileChange} className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
+
                     {
                      loading ? 
                         <p className='text-black text-xl'>Detecting person...</p>:

@@ -16,12 +16,12 @@ const AllCourses = () => {
                     <div className="card card-compact bg-base-100 w-96 shadow-xl">
                         <figure>
                             <img
-                            src="	https://ss.kln.ac.lk/depts/it/images/demo/course/DB.jpg"
-                            alt="Shoes" />
+                            src={course?.courseImageURL || 'https://i.ibb.co.com/LpWc6vD/9d3f66c14f2c23631c17999c61f2a076.jpg'}
+                            alt="course image" />
                         </figure>
                         <div className="card-body">
-                            <h2 className="card-title">{course.courseCode}</h2>
-                            <p>Teacher: {course.instructorName}</p>
+                            <h2 className="card-title">{course?.courseCode}</h2>
+                            <p>Teacher: {course?.instructorName}</p>
                             <div className="card-actions justify-end">
                             <Link to={`/courseDetails/${course._id}`} ><button className="btn bg-gradient-to-br from-purple-600 to-blue-500 text-white">Details</button></Link>
                             </div>
