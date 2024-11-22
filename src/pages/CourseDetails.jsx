@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useCourseDetails from '../hooks/useCourseDetails';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { BsPersonWorkspace } from "react-icons/bs";
 import { BsGlobe } from "react-icons/bs";
 import { PiClockCountdownBold } from "react-icons/pi";
@@ -12,20 +12,20 @@ const CourseDetails = () => {
   // State for active tab
   const [activeTab, setActiveTab] = useState("Overview");
   
-  function transformDriveLink(link) {
-    if (!link.includes("view?usp=sharing")) {
-      throw new Error("Invalid Google Drive link format.");
-    }
+  // function transformDriveLink(link) {
+  //   if (!link.includes("view?usp=sharing")) {
+  //     throw new Error("Invalid Google Drive link format.");
+  //   }
   
-    const fileIdMatch = link.match(/\/d\/(.*?)\/view\?/);
-    if (!fileIdMatch || fileIdMatch.length < 2) {
-      throw new Error("Could not extract the file ID from the link.");
-    }
+  //   const fileIdMatch = link.match(/\/d\/(.*?)\/view\?/);
+  //   if (!fileIdMatch || fileIdMatch.length < 2) {
+  //     throw new Error("Could not extract the file ID from the link.");
+  //   }
   
-    const fileId = fileIdMatch[1];
+  //   const fileId = fileIdMatch[1];
   
-    return `https://drive.google.com/file/d/${fileId}/preview`;
-  }
+  //   return `https://drive.google.com/file/d/${fileId}/preview`;
+  // }
   
   const renderTabContent = () => {
     switch (activeTab) {
@@ -84,7 +84,16 @@ const CourseDetails = () => {
             <PiClockCountdownBold className="text-blue-700 text-xl" /> Credit: {courseDetails.creditCount}
           </span>
         </div>
+        <div className='ml-5 md:ml-[20%]'>
+          <Link to={`/courseContent/${courseDetails._id}`}>        
+            <button type="button" className="my-5 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore Contents</button>
+          </Link>
+        </div>
+          
+        
       </div>
+
+     
 
       {/* Tabs */}
       <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
