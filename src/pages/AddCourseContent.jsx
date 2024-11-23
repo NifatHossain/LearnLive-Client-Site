@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import useAxiosPublic from "../hooks/useAxiosPublic";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const AddCourseContent = () => {
   const cloudName = import.meta.env.VITE_cloudinaryCloudName;
   const uploadPreset = import.meta.env.VITE_cloudinaryUploadPreset;
   const axiosPublic= useAxiosPublic()
   const { id } = useParams();
+  const navigate= useNavigate()
   const [lectures, setLectures] = useState([
     { lectureName: "", fileUrl: "" },
   ]); // Manage fileUrl instead of file
@@ -56,9 +58,11 @@ const AddCourseContent = () => {
       // Send the array of lectures to the backend
       const result= await axiosPublic.post(`addCourseContent/${id}`, { lectures });
       console.log(result)
-      alert("Course content added successfully!");
+      toast.success("Course content added successfully!");
+      navigate(`/courseDetails/${id}`)
     } catch (error) {
       console.error("Error submitting course content:", error);
+      toast.error('Error submitting course content')
     } finally {
       setLoading(false);
     }
@@ -130,6 +134,7 @@ const AddCourseContent = () => {
           {loading ? "Uploading..." : "Submit"}
         </button>
       </div>
+      <Toaster></Toaster>
     </div>
   );
 };

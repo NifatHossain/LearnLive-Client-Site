@@ -10,12 +10,14 @@ const AllCourses = () => {
             <div className='py-10 bg-gradient-to-br from-purple-600 to-blue-500  text-white font-semibold'>
                 <h1 className='ml-10 text-3xl'>Courses</h1>
             </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-w-full ml-2 md:ml-12'>
             {
                 !isLoading ? courses.map((course)=><div key={course._id} className='flex justify-center py-5'>
-                <div className='grid grid-cols-3 gap-4'>
-                    <div className="card card-compact bg-base-100 w-96 shadow-xl">
+                <div className='grid md:grid-cols-3 gap-4'>
+                    <div className="card card-compact bg-base-100  md:w-80 lg:w-96 shadow-xl">
                         <figure>
                             <img
+                            className='lg:h-64 lg:w-full'
                             src={course?.courseImageURL || 'https://i.ibb.co.com/LpWc6vD/9d3f66c14f2c23631c17999c61f2a076.jpg'}
                             alt="course image" />
                         </figure>
@@ -40,6 +42,7 @@ const AllCourses = () => {
                 </div>
             </div>
             }
+            </div>
         </div>
     );
 };

@@ -86,7 +86,7 @@ const Footer = () => {
                     <a className="link link-hover">Privacy policy</a>
                     <a className="link link-hover">Cookie policy</a>
                 </nav>  */}
-                <form>
+                <form className="md:scale-75 lg:scale-100">
                     <h6 className="footer-title text-2xl">Newsletter</h6> 
                     <fieldset className="form-control">
                     <label className="label">

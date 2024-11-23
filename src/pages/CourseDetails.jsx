@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import useCourseDetails from '../hooks/useCourseDetails';
 import { Link, useParams } from 'react-router-dom';
 import { BsPersonWorkspace } from "react-icons/bs";
 import { BsGlobe } from "react-icons/bs";
 import { PiClockCountdownBold } from "react-icons/pi";
+import { AuthContext } from '../providers/AuthProvider';
 
 const CourseDetails = () => {
   const { id } = useParams();
   const [isLoading, courseDetails,refetch] = useCourseDetails(id);
+  const {user}=useContext(AuthContext)
   
   // State for active tab
   const [activeTab, setActiveTab] = useState("Overview");
@@ -85,9 +87,23 @@ const CourseDetails = () => {
           </span>
         </div>
         <div className='ml-5 md:ml-[20%]'>
-          <Link to={`/courseContent/${courseDetails._id}`}>        
-            <button type="button" className="my-5 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore Contents</button>
-          </Link>
+          {
+            (user.email == courseDetails.instructorEmail )?<div>
+              <Link to={`/courseContent/${courseDetails._id}`}>        
+                <button type="button" className="my-5 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore Contents</button>
+              </Link>
+              <Link to={`/addCourseContent/${courseDetails._id}`}>        
+                <button type="button" className="my-5 text-white bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Add Content</button>
+              </Link>
+              <Link to={`/createQuiz/${courseDetails._id}`}>        
+                <button type="button" className="my-5 text-white bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Create Quiz</button>
+              </Link>
+            </div>:
+            <Link to={`/courseContent/${courseDetails._id}`}>        
+              <button type="button" className="my-5 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore Contents</button>
+            </Link>
+          }
+          
         </div>
           
         
