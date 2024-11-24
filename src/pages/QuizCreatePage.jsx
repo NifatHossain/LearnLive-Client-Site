@@ -62,7 +62,7 @@ const QuizCreatePage = () => {
     <div className="p-5 max-w-screen-md mx-auto bg-blue-50">
       <h1 className="text-2xl font-bold mb-5">Add Quiz</h1>
 
-      {/* Quiz Name */}
+      
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Quiz Name</label>
         <input
@@ -75,7 +75,6 @@ const QuizCreatePage = () => {
         />
       </div>
 
-      {/* Question Type */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Question Type</label>
         <select
@@ -84,7 +83,7 @@ const QuizCreatePage = () => {
           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         >
           <option value="mcq">MCQ</option>
-          <option value="normal">Normal</option>
+          {/* <option value="normal">Normal</option> */}
         </select>
       </div>
 
@@ -101,7 +100,6 @@ const QuizCreatePage = () => {
 
       {questionType === "mcq" && (
         <>
-          {/* Options */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Options</label>
             {options.map((option, index) => (
@@ -120,7 +118,6 @@ const QuizCreatePage = () => {
             ))}
           </div>
 
-          {/* Correct Answer */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Correct Answer</label>
             <input

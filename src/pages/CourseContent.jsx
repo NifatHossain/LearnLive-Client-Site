@@ -1,5 +1,5 @@
 import { Button, Drawer, Sidebar, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import {
   HiChartPie,
@@ -7,11 +7,13 @@ import {
   HiCollection,
   HiInformationCircle,
 } from "react-icons/hi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useCourseContent from "../hooks/useCourseContent";
 const CourseContent = () => {
   const {id}=useParams()
   const [isLoading,courseContents,refetch]=useCourseContent(id)
+  const navigate= useNavigate()
+  // console.log(courseContents)
   const [pdfLink,setPdfLink]=useState(null)
   const handleContentSelection=(fileLink)=>{
     setPdfLink(fileLink)
@@ -20,6 +22,10 @@ const CourseContent = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleClose = () => setIsOpen(false);
+  // useEffect(() => {
+  //   // refetch(); // Fetch data when `id` changes
+  // }, []);
+  
   return (
     <div className="relative">
       <div className="flex min-h-[50vh] items-center justify-start z-10 absolute ">
@@ -46,7 +52,7 @@ const CourseContent = () => {
                 <Sidebar.Items>
                   <Sidebar.ItemGroup>
                     {
-                      !isLoading? courseContents.lectures.map((lecture,idx)=><Sidebar.Item className="cursor-pointer" onClick={()=>handleContentSelection(lecture.fileUrl)} key={idx++}  icon={HiClipboard}>
+                      !isLoading && courseContents?.lectures ? courseContents.lectures.map((lecture,idx)=><Sidebar.Item className="cursor-pointer" onClick={()=>handleContentSelection(lecture.fileUrl)} key={idx++}  icon={HiClipboard}>
                         {lecture?.lectureName}
                       </Sidebar.Item>):<Sidebar.Item  icon={HiClipboard}>
                       {'Loading...'}
@@ -58,13 +64,14 @@ const CourseContent = () => {
                   </Sidebar.ItemGroup>
                   <Sidebar.ItemGroup>
                   <Drawer.Header title="Quiz" titleIcon={() => <></>} />
-                    <Sidebar.Item
-                      href="https://github.com/themesberg/flowbite-react/"
-                      icon={HiClipboard}
-                    >
-                      Docs
+                  {
+                      !isLoading && courseContents?.quizes ? courseContents.quizes.map((quiz,idx)=><Sidebar.Item className="cursor-pointer" onClick={()=>navigate(`/quiz/${id}/${quiz?.quizName}`)} key={idx++}  icon={HiClipboard}>
+                        {quiz?.quizName}
+                      </Sidebar.Item>):<Sidebar.Item  icon={HiClipboard}>
+                      {'Loading...'}
                     </Sidebar.Item>
-                    <Sidebar.Item
+                    }
+                    {/* <Sidebar.Item
                       href="https://flowbite-react.com/"
                       icon={HiCollection}
                     >
@@ -75,7 +82,7 @@ const CourseContent = () => {
                       icon={HiInformationCircle}
                     >
                       Help
-                    </Sidebar.Item>
+                    </Sidebar.Item> */}
                   </Sidebar.ItemGroup>
                 </Sidebar.Items>
               </div>

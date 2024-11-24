@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 
 const useCourseContent = (id) => {
     const axiosPublic=useAxiosPublic()
-    const { isLoading, refetch,data: courseContents=[] } = useQuery({
-        queryKey: ['details'],
+    const { isLoading, refetch,data } = useQuery({
+        queryKey: ['details',id],
         queryFn:async () => {
             const res = await axiosPublic.get(`/getCourseContents/${id}`)
             // console.log(res.data)
@@ -13,6 +13,7 @@ const useCourseContent = (id) => {
           },
 
     })
+    const courseContents = data || { lectures: [] };
     return [isLoading,courseContents,refetch]
 };
 
