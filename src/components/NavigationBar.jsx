@@ -35,7 +35,7 @@ const NavigationBar = () => {
                     <span className="block text-sm">{user.displayName}</span>
                     <span className="block truncate text-sm font-medium">{user.email}</span>
                 </Dropdown.Header>
-                <Dropdown.Item>Dashboard</Dropdown.Item>
+                <Dropdown.Item><Link to={'/sideBar'}>Dashboard</Link></Dropdown.Item>
                 <Dropdown.Item>Settings</Dropdown.Item>
                 <Dropdown.Item>Earnings</Dropdown.Item>
                 <Dropdown.Divider />
@@ -51,7 +51,7 @@ const NavigationBar = () => {
                 <Link to={'/'} active>
                 Home
                 </Link>
-                <Navbar.Link href="#">About</Navbar.Link>
+                <Link to={'/sideBar'}>Dashboard</Link>
                 <Link to={'/allCourses'}>Courses</Link>
                 {/* <Navbar.Link href="#">Pricing</Navbar.Link> */}
                 <Navbar.Link href="#">Contact</Navbar.Link>

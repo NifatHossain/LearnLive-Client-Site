@@ -13,6 +13,7 @@ const SignUp = () => {
     const navigate= useNavigate()
     const [stream, setStream] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [imgLoading, setImgLoading]=useState(true)
     const [name, setName]=useState('')
     const [imageUrl, setImageUrl] = useState(''); 
     const [studentId, setStudentId]=useState('')
@@ -63,6 +64,7 @@ const SignUp = () => {
 
                 const image = result.data.data.display_url;
                 setImageUrl(image)
+                setImgLoading(false)
                 console.log("Uploaded image URL:", image);
             } catch (error) {
                 console.error("Error uploading file:", error.response?.data || error.message);
@@ -136,6 +138,7 @@ const SignUp = () => {
               name: name, // You can use input fields to get this value
               Id: studentId,
               email: email,
+              password:password,
               descriptor: Array.from(descriptor), // Convert to array to save as JSON
               role:role,
               courses:[],
@@ -239,10 +242,13 @@ const SignUp = () => {
                      loading ? 
                         <p className='text-black text-xl'>Detecting person...</p>:
                         <button
-                            type="submit"
-                            className="w-full bg-blue-500 mt-3 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-400"
-                        >
-                            Sign Up
+                            type="button"
+                            disabled={imgLoading}
+                            className={`my-5 ${
+                                imgLoading ? "bg-gray-400" : "bg-gradient-to-r from-green-400 via-green-500 to-green-600"
+                            } text-white hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`}
+                            >
+                            {imgLoading ? "Uploading image..." : "Sign Up"}
                         </button>
                     }
                     <p className="text-center mt-4 text-gray-700 sm:text-gray-500 md:text-gray-600 lg:text-gray-700">

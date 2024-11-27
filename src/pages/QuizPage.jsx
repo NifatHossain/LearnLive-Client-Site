@@ -4,6 +4,7 @@ import useCourseContent from "../hooks/useCourseContent";
 import * as faceapi from 'face-api.js';
 import { AuthContext } from "../providers/AuthProvider";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import toast, { Toaster } from "react-hot-toast";
 
 
 const QuizPage = () => {
@@ -64,8 +65,8 @@ const QuizPage = () => {
         else{
             toast.error('face data mismatched')
             setFaceIssueExamTerminated(true)
-            handleSubmit();
             stopCamera()
+            handleSubmit();
         }
     })
     .catch((error)=>{
@@ -96,8 +97,8 @@ const QuizPage = () => {
         } else {
           console.log('No face detected during exam.');
           setFaceIssueExamTerminated(true)
-          handleSubmit();
           stopCamera()
+          handleSubmit();
         }
         // setShowRegisterBtn(!!detection); // Update faceDetected state based on detection result
     }
@@ -139,8 +140,8 @@ useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden" && examStarted) {
         setExamTerminated(true);
-        handleSubmit();
         stopCamera()
+        handleSubmit();
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -233,6 +234,7 @@ useEffect(() => {
                   setModalMessage(null);
                   setExamStarted(true);
                 } else {
+                  stopCamera()
                   setModalMessage(null);
                   navigate(`/courseContent/${courseId}`)
                 }
@@ -290,6 +292,7 @@ useEffect(() => {
       {!examStarted && !selectedQuiz && !isLoading && (
         <p>No quiz found with the given name.</p>
       )}
+      <Toaster/>
     </div>
   );
 };
