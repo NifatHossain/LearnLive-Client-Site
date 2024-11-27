@@ -1,8 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import useCourseContent from "../hooks/useCourseContent";
+import * as faceapi from 'face-api.js';
+import { AuthContext } from "../providers/AuthProvider";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+
 
 const QuizPage = () => {
+  const videoRef=useRef()
+  const [stream, setStream] = useState(null);
   const { courseId, quizName } = useParams();
   const [selectedQuiz, setSelectedQuiz] = useState(null); // Store the selected quiz
   const [answers, setAnswers] = useState({});
@@ -10,9 +16,105 @@ const QuizPage = () => {
   const [modalMessage, setModalMessage] = useState("quiz");
   const [examStarted, setExamStarted] = useState(false);
   const [examTerminated, setExamTerminated] = useState(false);
+  const [faceIssueExamTerminated, setFaceIssueExamTerminated]=useState(false)
   const [isLoading,courseContents,refetch] = useCourseContent(courseId);
   const examRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const {user}=useContext(AuthContext)
+  const axiosPublic=useAxiosPublic()
+  const [totalScore, setTotalScore]=useState(0)
+  const navigate= useNavigate()
 
+
+  const loadModels=async()=>{
+    const MODEL_URL='/models';
+    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
+    await faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL)
+  }
+  const startVideo = () => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then((mediaStream) => {
+            videoRef.current.srcObject = mediaStream;
+            setStream(mediaStream); // Store the MediaStream for later
+        })
+        .catch((err) => console.error(err));
+  };
+
+  const stopCamera = () => {
+    if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+        setStream(null); // Clear the stream from state
+    }
+  };
+  const savePersonDescriptor = (person) => {
+    // const registeredPersons = JSON.parse(localStorage.getItem('registeredPersons')) || [];
+    // registeredPersons.push(person);
+    // localStorage.setItem('registeredPersons', JSON.stringify(registeredPersons));
+   
+    axiosPublic.post('/verifyFace',person)
+    .then((result)=>{
+        if(result.data.match){
+          console.log(result);
+          // navigate(`/quizTest/${courseId}/${quizName}`)
+            
+        }
+        else{
+            toast.error('face data mismatched')
+            setFaceIssueExamTerminated(true)
+            handleSubmit();
+            stopCamera()
+        }
+    })
+    .catch((error)=>{
+        console.log(error)
+        toast.error("failed to check facedata from database")
+    })
+};
+  const detectFaceInRealTime = async () => {
+    if (videoRef.current) {
+        const detection = await faceapi
+            .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+        
+        if (detection) {
+          console.log('detected successfully')
+          setLoading(false)
+          const { descriptor } = detection;
+    
+          // Save the descriptor along with a name or ID of the person
+          const person = {
+            email: user.email,
+            descriptor: Array.from(descriptor), 
+          };
+    
+          // Save this data to a backend or local storage
+          savePersonDescriptor(person);
+        } else {
+          console.log('No face detected during exam.');
+          setFaceIssueExamTerminated(true)
+          handleSubmit();
+          stopCamera()
+        }
+        // setShowRegisterBtn(!!detection); // Update faceDetected state based on detection result
+    }
+};
+useEffect(() => {
+  let interval;
+  if (modalMessage === null && examStarted) {
+    startVideo();
+    loadModels();
+    interval = setInterval(() => {
+      detectFaceInRealTime();
+    }, 3000); // 3 seconds
+  }
+  return () => {
+    clearInterval(interval);
+  };
+}, [modalMessage, examStarted]);
   // Timer logic
   useEffect(() => {
     let timer;
@@ -38,6 +140,7 @@ const QuizPage = () => {
       if (document.visibilityState === "hidden" && examStarted) {
         setExamTerminated(true);
         handleSubmit();
+        stopCamera()
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -52,23 +155,47 @@ const QuizPage = () => {
       [questionIndex]: option,
     }));
   };
+  const calculateScore = () => {
+    const questions = selectedQuiz.quizQuestions;
+    let score = 0;
 
+    questions.forEach((question, index) => {
+      if (answers[index] === question.correctAnswer) {
+        score++;
+      }
+    });
+
+    return score;
+  };
   // Submit quiz
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     setExamStarted(false);
+    const score = calculateScore();
+    setTotalScore(score)
     const submission = {
-      courseId,
-      quizName,
-      answers, // Store answers for submission
+      courseId:courseId,
+      quizName:quizName,
+      answers:answers, // Store answers for submission
+      score:score,
     };
-    console.log("Submitted Answers:", submission);
-
-    if (examTerminated) {
-      setModalMessage(
-        "Your exam was terminated due to leaving the quiz. Your answers have been submitted."
-      );
+    const result= await axiosPublic.post(`/addSubmission/${user.email}`,submission)
+    if (result.status === 200) {
+      console.log("Result stored successfully");
     } else {
-      setModalMessage("Your answers have been successfully submitted.");
+      console.log("Result was not stored successfully");
+    }
+    console.log("Submitted Answers:", submission);
+    
+    if(examTerminated) {
+      setModalMessage(
+        `Your exam was terminated due to leaving the quiz. Your score is: ${score}/${selectedQuiz.quizQuestions.length}`
+      );
+    } 
+    else if(faceIssueExamTerminated){
+      setModalMessage(`Your exam was terminated since Face recognition failed. Your score is: ${score}/${selectedQuiz.quizQuestions.length}`);
+    }
+    else {
+      setModalMessage(`Your answers have been successfully submitted  Your score is: ${score}/${selectedQuiz.quizQuestions.length}`);
     }
   };
 
@@ -80,6 +207,17 @@ const QuizPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-5 relative">
+      {
+        (modalMessage==null) && <div>
+          <video
+              ref={videoRef}
+              autoPlay
+              className="transform scale-x-[-1] border-2 fixed bottom-4 left-4 w-40 h-30"
+              width="400"
+              height="300"
+          />
+        </div>
+      }
       {/* Modal */}
       {modalMessage && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -96,6 +234,7 @@ const QuizPage = () => {
                   setExamStarted(true);
                 } else {
                   setModalMessage(null);
+                  navigate(`/courseContent/${courseId}`)
                 }
               }}
               className="btn btn-primary mt-4 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"

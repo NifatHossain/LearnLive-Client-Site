@@ -31,7 +31,6 @@ const SignUp = () => {
         await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
         await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
         await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
-        await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
         await faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL)
     };
     const startVideo = () => {
@@ -137,9 +136,10 @@ const SignUp = () => {
               name: name, // You can use input fields to get this value
               Id: studentId,
               email: email,
-              password: password,
               descriptor: Array.from(descriptor), // Convert to array to save as JSON
               role:role,
+              courses:[],
+              results:[],
               imageUrl:imageUrl
             };
       

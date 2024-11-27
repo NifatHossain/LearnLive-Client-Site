@@ -18,6 +18,7 @@ import CourseContent from "../pages/CourseContent";
 import AddCourseContent from "../pages/AddCourseContent";
 import QuizCreatePage from "../pages/QuizCreatePage";
 import QuizPage from "../pages/QuizPage";
+import TestQuizPage from "../pages/TestQuizPage";
 
 export const router = createBrowserRouter([
     {
@@ -79,7 +80,11 @@ export const router = createBrowserRouter([
         },
         {
           path:'/quiz/:courseId/:quizName',
-          element:<PrivateRoute><QuizPage></QuizPage></PrivateRoute>
+          element:<TestQuizPage></TestQuizPage>
+        },
+        {
+          path:'/quizTest/:courseId/:quizName',
+          element:<QuizPage></QuizPage>
         }
       ]
     }
