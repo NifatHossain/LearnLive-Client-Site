@@ -15,7 +15,7 @@ const HomePage = () => {
             <div className='flex justify-center'>
                 <Link to={'/allCourses'} className='text-xl  text-center bg-blue-700 p-2 text-white rounded-md'>View all courses</Link>
             </div>
-            <div className='flex justify-around my-20'>
+            <div className='flex flex-col md:flex-row items-center justify-around py-20'>
                 <h2 className='rounded-b-md p-4 border-b-4 border-green-700 text-black text-2xl font-extrabold text-center w-fit'>320 <br /> courses </h2>
                 <h2 className='rounded-b-md p-4 border-b-4 border-green-700 text-black text-2xl font-extrabold text-center w-fit'>3200+ <br /> Students </h2>
                 <h2 className='rounded-b-md p-4 border-b-4 border-green-700 text-black text-2xl font-extrabold text-center w-fit'>100+  <br /> teachers  </h2>

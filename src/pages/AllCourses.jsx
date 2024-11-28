@@ -6,7 +6,7 @@ const AllCourses = () => {
     const [isLoading, courses, refetch]=useAllCourse()
     console.log(courses.length)
     return (
-        <div className='bg-blue-50 min-h-screen'>
+        <div className='bg-blue-50 min-h-screen p-5'>
             <div className='py-10 bg-gradient-to-br from-purple-600 to-blue-500  text-white font-semibold'>
                 <h1 className='ml-10 text-3xl'>Courses</h1>
             </div>

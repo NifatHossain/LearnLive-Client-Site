@@ -176,8 +176,8 @@ const SignUp = () => {
     },[])
 
     return (
-        <div className="min-h-screen flex flex-col lg:flex-row items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 text-white p-4 lg:p-0">
-            <div className="lg:w-3/5 w-full h-full lg:h-[800px] bg-gradient-to-r from-blue-500 to-purple-500 text-white p-8 lg:rounded-lg shadow-lg flex flex-col items-center justify-center">
+        <div className="min-h-screen flex flex-col lg:flex-row items-center justify-center bg-[url('https://img.freepik.com/free-vector/abstact-hexagon-background-memphis-style_1017-31955.jpg')] bg-cover bg-center  text-white p-4 lg:p-0">
+            <div className="lg:w-3/5 w-full h-full lg:h-[800px] bg-[url('https://img.freepik.com/free-vector/abstact-hexagon-background-memphis-style_1017-31955.jpg')] bg-cover bg-center text-white p-8 lg:rounded-lg shadow-lg flex flex-col items-center justify-center">
                 <div className="text-center">
                     {/* <img src={logo} alt="Logo" className="w-32 mx-auto mb-4" /> */}
                     <h3 className="text-2xl font-bold mb-2">Welcome!</h3>
@@ -197,7 +197,7 @@ const SignUp = () => {
                     }
                 </div>
             </div>
-            <div className="lg:w-2/5 w-full  bg-gray-200 p-8 rounded-lg shadow-lg mt-8 lg:mt-0 lg:h-[800px] flex flex-col justify-center">
+            <div className="lg:w-2/5 w-full  bg-slate-100 p-8 rounded-lg shadow-lg mt-8 lg:mt-0 lg:h-[800px] flex flex-col justify-center">
                 <form className="space-y-4" onSubmit={handleFormSubmit}>
                     <h3 className="text-xl text-gray-700 sm:text-gray-500 md:text-gray-600 lg:text-gray-700 font-bold text-center underline">Sign Up</h3>
                     <p className="text-center text-gray-700 sm:text-gray-500 md:text-gray-600 lg:text-gray-700">Create your account</p>
@@ -248,7 +248,7 @@ const SignUp = () => {
                                 imgLoading ? "bg-gray-400" : "bg-gradient-to-r from-green-400 via-green-500 to-green-600"
                             } text-white hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`}
                             >
-                            {imgLoading ? "Uploading image..." : "Sign Up"}
+                            {imgLoading ? "complete fields..." : "Sign Up"}
                         </button>
                     }
                     <p className="text-center mt-4 text-gray-700 sm:text-gray-500 md:text-gray-600 lg:text-gray-700">

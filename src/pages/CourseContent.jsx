@@ -68,7 +68,7 @@ const CourseContent = () => {
                       !isLoading && courseContents?.quizes ? courseContents.quizes.map((quiz,idx)=><Sidebar.Item className="cursor-pointer" onClick={()=>navigate(`/quiz/${id}/${quiz?.quizName}`)} key={idx++}  icon={HiClipboard}>
                         {quiz?.quizName}
                       </Sidebar.Item>):<Sidebar.Item  icon={HiClipboard}>
-                      {'Loading...'}
+                      {'No Quiz Yet'}
                     </Sidebar.Item>
                     }
                     {/* <Sidebar.Item

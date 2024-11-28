@@ -5,7 +5,7 @@ import { FaLocationArrow, FaRegEnvelope } from "react-icons/fa";
 const Footer = () => {
     return (
         <div>
-            <footer className="footer p-10 bg-neutral text-neutral-content">
+            <footer className="footer pl-5 md:pl-5 pr-10 py-10 bg-neutral text-neutral-content">
                 <aside>
                 <div className=" text-2xl "><div className="flex flex-col items-center"><div><span className="text-red-500">Learn</span> Live</div><p className="text-xs font-light text-red-500">Ensuring Quality Learning Platform</p></div></div>
                     <div>
@@ -86,7 +86,7 @@ const Footer = () => {
                     <a className="link link-hover">Privacy policy</a>
                     <a className="link link-hover">Cookie policy</a>
                 </nav>  */}
-                <form className="md:scale-75 lg:scale-100">
+                <form className=" scale-90 md:scale-75 lg:scale-100">
                     <h6 className="footer-title text-2xl">Newsletter</h6> 
                     <fieldset className="form-control">
                     <label className="label">
