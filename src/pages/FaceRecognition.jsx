@@ -1,17 +1,20 @@
 import { useEffect, useRef } from "react";
 import * as faceapi from 'face-api.js';
 import { useState } from "react";
+import useUserFaceData from "../hooks/useUserFaceData";
 
 const FaceRecognition = () => {
   const videoRef = useRef();
   const canvasRef=useRef()
+  const [isLoading,faceData,refetch]=useUserFaceData()
+  console.log(faceData)
   const [loading, setLoading] = useState(true);
   const [age,setAge]=useState(0)
   const [gender,setGender]=useState('')
   const [mood, setMood]=useState('')
   const [detectedPerson,setDetectedPerson]=useState('')
   const loadModels = async () => {
-      const MODEL_URL = './models';
+      const MODEL_URL = '/models';
       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);

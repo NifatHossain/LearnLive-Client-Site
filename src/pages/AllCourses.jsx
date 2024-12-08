@@ -1,28 +1,31 @@
 import React from 'react';
 import useAllCourse from '../hooks/useAllCourse';
+import { Link } from 'react-router-dom';
 
 const AllCourses = () => {
     const [isLoading, courses, refetch]=useAllCourse()
     console.log(courses.length)
     return (
-        <div className='bg-blue-50 min-h-screen'>
+        <div className='bg-blue-50 min-h-screen p-5'>
             <div className='py-10 bg-gradient-to-br from-purple-600 to-blue-500  text-white font-semibold'>
                 <h1 className='ml-10 text-3xl'>Courses</h1>
             </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-w-full ml-2 md:ml-12'>
             {
                 !isLoading ? courses.map((course)=><div key={course._id} className='flex justify-center py-5'>
-                <div className='grid grid-cols-3 gap-4'>
-                    <div className="card card-compact bg-base-100 w-96 shadow-xl">
+                <div className='grid md:grid-cols-3 gap-4'>
+                    <div className="card card-compact bg-base-100  md:w-80 lg:w-96 shadow-xl">
                         <figure>
                             <img
-                            src="	https://ss.kln.ac.lk/depts/it/images/demo/course/DB.jpg"
-                            alt="Shoes" />
+                            className='lg:h-64 lg:w-full'
+                            src={course?.courseImageURL || 'https://i.ibb.co.com/LpWc6vD/9d3f66c14f2c23631c17999c61f2a076.jpg'}
+                            alt="course image" />
                         </figure>
                         <div className="card-body">
-                            <h2 className="card-title">{course.courseCode}</h2>
-                            <p>Teacher: {course.instructorName}</p>
+                            <h2 className="card-title">{course?.courseCode}</h2>
+                            <p>Teacher: {course?.instructorName}</p>
                             <div className="card-actions justify-end">
-                            <button className="btn bg-gradient-to-br from-purple-600 to-blue-500 text-white">Details</button>
+                            <Link to={`/courseDetails/${course._id}`} ><button className="btn bg-gradient-to-br from-purple-600 to-blue-500 text-white">Details</button></Link>
                             </div>
                         </div>
                     </div>
@@ -39,6 +42,7 @@ const AllCourses = () => {
                 </div>
             </div>
             }
+            </div>
         </div>
     );
 };

@@ -1,15 +1,24 @@
 import { Avatar, Dropdown, Navbar } from 'flowbite-react';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
 import toast, { Toaster } from 'react-hot-toast';
+import useUserFaceData from '../hooks/useUserFaceData';
 
 const NavigationBar = () => {
     const {user,logOut}=useContext(AuthContext)
+    const [isLoading,faceData,refetch]= useUserFaceData()
+    !isLoading && console.log(faceData)
     // console.log(user.userName)
+    useEffect(()=>{
+        if (user) {
+            refetch();
+        }
+    }, [user]);
     const handleLogOut=()=>{
         logOut()
         .then(()=>{
+            refetch()
             toast.success('Log out Successful')
         })
         .catch((error)=>{
@@ -35,9 +44,13 @@ const NavigationBar = () => {
                     <span className="block text-sm">{user.displayName}</span>
                     <span className="block truncate text-sm font-medium">{user.email}</span>
                 </Dropdown.Header>
-                <Dropdown.Item>Dashboard</Dropdown.Item>
-                <Dropdown.Item>Settings</Dropdown.Item>
-                <Dropdown.Item>Earnings</Dropdown.Item>
+                <Dropdown.Item><Link to={'/sideBar'}>Dashboard</Link></Dropdown.Item>
+                <Dropdown.Item><Link to={'/allCourses'}>Courses</Link></Dropdown.Item>
+                <Dropdown.Item>
+                {
+                    faceData.role=='teacher' && <Link to={'/addCourse'}>Add Course</Link>
+                }
+                </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item><button onClick={handleLogOut}>Sign out</button></Dropdown.Item>
                 </Dropdown>
@@ -51,10 +64,13 @@ const NavigationBar = () => {
                 <Link to={'/'} active>
                 Home
                 </Link>
-                <Navbar.Link href="#">About</Navbar.Link>
+                <Link to={'/sideBar'}>Dashboard</Link>
                 <Link to={'/allCourses'}>Courses</Link>
+                {
+                    faceData.role=='teacher' && <Link to={'/addCourse'}>Add Course</Link>
+                }
                 {/* <Navbar.Link href="#">Pricing</Navbar.Link> */}
-                <Navbar.Link href="#">Contact</Navbar.Link>
+                {/* <Navbar.Link href="#">Contact</Navbar.Link> */}
             </Navbar.Collapse>
             <Toaster></Toaster>
         </Navbar>
