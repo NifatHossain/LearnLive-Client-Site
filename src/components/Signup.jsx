@@ -27,7 +27,7 @@ const SignUp = () => {
     // const stdIdRef= useRef(null)
     const [showRegisterBtn, setShowRegisterBtn]=useState(false)
     const loadModels = async () => {
-        const MODEL_URL = './models';
+        const MODEL_URL = '/models';
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
         await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
         await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
@@ -231,7 +231,7 @@ const SignUp = () => {
                     />
                     {/* <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label> */}
                     <select required onChange={(e) =>{setRole(e.target.value)} } id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>Choose your Role</option>
+                        <option>Choose your Role</option>
                         <option value="teacher">Teacher</option>
                         <option value="student">Student</option>
                     </select>
@@ -242,7 +242,7 @@ const SignUp = () => {
                      loading ? 
                         <p className='text-black text-xl'>Detecting person...</p>:
                         <button
-                            type="button"
+                            type="submit"
                             disabled={imgLoading}
                             className={`my-5 ${
                                 imgLoading ? "bg-gray-400" : "bg-gradient-to-r from-green-400 via-green-500 to-green-600"
